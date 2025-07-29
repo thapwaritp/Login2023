@@ -1,0 +1,71 @@
+<script>
+  $( document ).ready(function() {
+     setFooter()
+    });
+ 
+  	function login(obj){
+      event.preventDefault()
+         Swal.fire({
+            position: 'top',
+            icon: 'info',
+            title: 'Loading...',
+            showConfirmButton: false,
+          })
+          Swal.showLoading()
+            google.script.run.withSuccessHandler((dataArray)=>{
+          if(dataArray && dataArray !== undefined && dataArray.length != 0){
+                console.log(dataArray)
+                let status = dataArray[0][4]
+           Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'Success',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            if(status == "Teacher"){
+              document.getElementById("pageA").style.display = "none";
+              document.getElementById("pageB").style.display = "block";
+              document.getElementById("admin").innerHTML = dataArray[0][2]
+              document.getElementById("pic").src = dataArray[0][3]
+            }
+
+             if(status == "Student"){
+              document.getElementById("pageA").style.display = "none";
+              document.getElementById("pageC").style.display = "block";
+              document.getElementById("admin2").innerHTML = dataArray[0][2]
+              document.getElementById("pic2").src = dataArray[0][3]
+            }
+
+            document.getElementById("myForm").reset();
+              }else{
+                Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'ไม่พบข้อมูล!!',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              }
+          }).loginData(obj);
+          }
+
+        function logout(){
+          Swal.fire({
+          position: 'top',
+          title: 'Are you sure?',
+          text: "Logout!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#116bfd',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById("pageA").style.display = "block";
+            document.getElementById("pageB").style.display = "none";
+            document.getElementById("pageC").style.display = "none";
+          }
+        })
+        }   
+	</script>
